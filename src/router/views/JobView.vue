@@ -18,7 +18,7 @@ const state = reactive({
 
 const toast = useToast();
 const apiUrl = import.meta.env.VITE_API_URL;
-
+console.log(state);
 onMounted(async () => {
   try {
     const res = await axios.get(`${apiUrl}/api/jobs/${jobId}`);
@@ -35,8 +35,11 @@ async function deleteJob(id) {
     const confirm = window.confirm("Are you sure you want to delete this job?");
     if (confirm) {
       const res = await axios.delete(`${apiUrl}/api/jobs/${id}`);
-      router.push("/jobs");
-      toast.success("Job Deleted  successfully");
+      const { job, message } = res.data;
+      if (job) {
+        router.push("/jobs");
+        toast.success(message);
+      }
     }
   } catch (error) {
     console.log("error deleteing job ");
@@ -45,8 +48,8 @@ async function deleteJob(id) {
 }
 </script>
 <template>
-  <Spinner v-if="state.isLoading" />
-  <section v-else>
+  <Spinner v-if="state.isLoading && !state.job" />
+  <section v-else-if="state.job !== null">
     <div class="container m-auto py-6 px-6">
       <RouterLink
         to="/jobs"

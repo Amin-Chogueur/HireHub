@@ -4,6 +4,7 @@ import { RouterLink } from "vue-router";
 import Spinner from "./ui/Spinner.vue";
 import Job from "./Job.vue";
 import axios from "axios";
+import NoResultFound from "./ui/NoResultFound.vue";
 defineProps({
   limit: {
     type: Number,
@@ -29,6 +30,7 @@ onMounted(async () => {
 </script>
 <template>
   <Spinner v-if="state.isLoading" />
+  <NoResultFound v-else-if="state.jobs.length === 0" message="No Jobs Found" />
   <section v-else class="bg-green-50 px-4 py-10">
     <div class="container-xl lg:container m-auto">
       <h2 class="text-3xl font-bold text-green-500 mb-6 text-center">

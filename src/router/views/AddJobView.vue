@@ -17,12 +17,14 @@ const jobData = reactive({
   },
 });
 const toast = useToast();
+const apiUrl = import.meta.env.VITE_API_URL;
+
 async function addJob() {
   try {
-    const res = await axios.post("http://localhost:3000/api/jobs", jobData);
-    const data = res.data;
-    router.push(`/jobs/${data._id}`);
-    toast.success("Job was added successfully");
+    const res = await axios.post(`${apiUrl}/api/jobs`, jobData);
+    const { createdJob, message } = res.data;
+    router.push(`/jobs/${createdJob._id}`);
+    toast.success(message);
   } catch (error) {
     console.log("error while creating job");
     toast.success("Error adding job");

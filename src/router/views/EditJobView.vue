@@ -42,8 +42,11 @@ onMounted(async () => {
 async function editJob() {
   try {
     const res = await axios.patch(`${apiUrl}/api/jobs/${jobId}`, state.job);
-    router.push(`/jobs/${jobId}`);
-    toast.success("edit job successfully");
+    const { job, message } = res.data;
+    if (job) {
+      router.push(`/jobs/${jobId}`);
+      toast.success(message);
+    }
   } catch (error) {
     console.log("error editing job");
     toast.error("error editing job");
